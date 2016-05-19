@@ -17,12 +17,17 @@
           if (status == 0) {
             var next_status = 1;
             if (clicking_confirms) {
-              $('a, input[type=submit]').bind('click.eu_cookie_compliance', function(){
-                if(!agreed_enabled) {
-                  Drupal.eu_cookie_compliance.setStatus(1);
-                  next_status = 2;
+              $('a, input[type=submit]').bind('click.eu_cookie_compliance', function(e) {
+                // We change the status only if the action came from a mouse
+                // event. There are cases when the click event is triggered with
+                // javascript, and we do not want to respond to those events.
+                if (e.originalEvent instanceof MouseEvent === true) {
+                  if (!agreed_enabled) {
+                    Drupal.eu_cookie_compliance.setStatus(1);
+                    next_status = 2;
+                  }
+                  Drupal.eu_cookie_compliance.changeStatus(next_status);
                 }
-                Drupal.eu_cookie_compliance.changeStatus(next_status);
               });
             }
 
