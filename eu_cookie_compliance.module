@@ -47,7 +47,7 @@ function eu_cookie_compliance_page_alter(&$page) {
  * Implements hook_page_build().
  */
 function eu_cookie_compliance_page_build(&$page) {
-  $popup_settings = eu_cookie_compliance_get_settings();
+  $popup_settings = eu_cookie_compliace_translate_settings(eu_cookie_compliance_get_settings());
   global $theme, $user;
 
   // Check Add/Remove domains.
@@ -294,6 +294,31 @@ function eu_cookie_compliance_get_settings($setting = 'all') {
   else {
     return NULL;
   }
+}
+
+/**
+ * Translates some eu cookie compliance settings.
+ *
+ * We do this because there are issues when using the variable and the domain
+ * module together, which basically make translatable variables not working.
+ */
+function eu_cookie_compliace_translate_settings($settings) {
+  $translated_settings = $settings;
+  $settings_to_translate = array(
+    'popup_agree_button_message',
+    'popup_disagree_button_message',
+    'popup_find_more_button_message',
+    'popup_hide_button_message',
+  );
+  foreach ($translated_settings as $key => $value) {
+    if ($key === 'popup_info' || $key === 'mobile_popup_info' || $key === 'popup_aggreed') {
+      $translated_settings[$key]['value'] = t($translated_settings[$key]['value']);
+    }
+    elseif (in_array($key, $settings_to_translate)) {
+      $translated_settings[$key] = t($translated_settings[$key]);
+    }
+  }
+  return $translated_settings;
 }
 
 /**
