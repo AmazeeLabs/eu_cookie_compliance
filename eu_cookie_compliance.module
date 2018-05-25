@@ -311,7 +311,7 @@ function eu_cookie_compliace_translate_settings($settings) {
     'popup_hide_button_message',
   );
   foreach ($translated_settings as $key => $value) {
-    if ($key === 'popup_info' || $key === 'mobile_popup_info' || $key === 'popup_aggreed') {
+    if ($key === 'popup_info' || $key === 'mobile_popup_info' || $key === 'popup_agreed') {
       $translated_settings[$key]['value'] = t($translated_settings[$key]['value']);
     }
     elseif (in_array($key, $settings_to_translate)) {
